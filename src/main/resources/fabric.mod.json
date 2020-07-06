@@ -17,11 +17,6 @@
   "icon": "assets/openworlds/icon.png",
 
   "environment": "*",
-  "entrypoints": {
-    "client": [
-      "io.github.waterpicker.openworlds.OpenWorlds"
-    ]
-  },
   "mixins": [
     "openworlds.mixins.json"
   ],
