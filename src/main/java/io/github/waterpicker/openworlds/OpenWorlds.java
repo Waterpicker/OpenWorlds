@@ -1,9 +1,11 @@
 package io.github.waterpicker.openworlds;
 
+import io.github.waterpicker.openworlds.mixin.SkyPropertiesAccessor;
 import io.github.waterpicker.openworlds.renderer.WeatherRenderer;
 import io.github.waterpicker.openworlds.renderer.CloudRenderer;
 import io.github.waterpicker.openworlds.renderer.SkyRenderer;
 
+import net.minecraft.client.render.SkyProperties;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.dimension.DimensionType;
 
@@ -21,6 +23,10 @@ public class OpenWorlds {
 
     public static void registerWeatherRenderer(RegistryKey<DimensionType> key, WeatherRenderer renderer) {
         weatherRenderers.put(key, renderer);
+    }
+
+    public static void registerSkyProperty(RegistryKey<DimensionType> key, SkyProperties properties) {
+        ((SkyPropertiesAccessor) properties).getBY_DIMENSION_TYPE().put(key, properties);
     }
 
     public static void registerCloudRenderer(RegistryKey<DimensionType> key, CloudRenderer renderer) {
