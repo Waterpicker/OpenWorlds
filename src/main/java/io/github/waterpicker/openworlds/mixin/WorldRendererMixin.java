@@ -19,11 +19,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
-    @Shadow @Final private MinecraftClient client;
+    @Shadow
+    @Final
+    private MinecraftClient client;
 
     @Inject(at = @At("HEAD"), method = "renderWeather", cancellable = true)
     private void renderWeather(LightmapTextureManager manager, float tickDelta, double x, double y, double z, CallbackInfo info) {
-        WeatherRenderer renderer = OpenWorlds.getWeatherRenderer(client.world.getDimensionRegistryKey());
+        WeatherRenderer renderer = OpenWorlds.getWeatherRenderer(client.world.getRegistryKey().getValue());
 
         if(renderer != null) {
             renderer.render(client, manager, tickDelta, x,y,z);
@@ -33,7 +35,7 @@ public class WorldRendererMixin {
 
     @Inject(at = @At("HEAD"), method = "renderClouds(Lnet/minecraft/client/util/math/MatrixStack;FDDD)V", cancellable = true)
     private void renderCloud(MatrixStack matrices, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo info) {
-        CloudRenderer renderer = OpenWorlds.getCloudRenderer(client.world.getDimensionRegistryKey());
+        CloudRenderer renderer = OpenWorlds.getCloudRenderer(client.world.getRegistryKey().getValue());
 
         if(renderer != null) {
             renderer.render(client, matrices, tickDelta, cameraX, cameraY, cameraZ);
@@ -43,7 +45,7 @@ public class WorldRendererMixin {
 
     @Inject(at = @At("HEAD"), method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;F)V", cancellable = true)
     private void renderSky(MatrixStack matrices, float tickDelta, CallbackInfo info) {
-        SkyRenderer renderer = OpenWorlds.getSkyRenderer(client.world.getDimensionRegistryKey());
+        SkyRenderer renderer = OpenWorlds.getSkyRenderer(client.world.getRegistryKey().getValue());
 
         if(renderer != null) {
             renderer.render(client, matrices, tickDelta);
