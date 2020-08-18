@@ -18,14 +18,26 @@ public class OpenWorlds {
     private static final Map<Identifier, CloudRenderer> cloudRenderers = new HashMap<>();
     private static final Map<Identifier, WeatherRenderer> weatherRenderers = new HashMap<>();
 
+    /**
+     * @param key The Identifier of your Dimension Type
+     * @param renderer A {@link SkyRenderer} implementation
+     */
     public static void registerSkyRenderer(Identifier key, SkyRenderer renderer) {
         skyRenderers.put(key, renderer); 
     }
 
+    /**
+     * @param key The Identifier of your Dimension Type
+     * @param renderer A {@link WeatherRenderer implementation}
+     */
     public static void registerWeatherRenderer(Identifier key, WeatherRenderer renderer) {
         weatherRenderers.put(key, renderer);
     }
 
+    /**
+     * @param key The Identifier of your Dimension Type
+     * @param properties The property to be registered
+     */
     public static void registerSkyProperty(Identifier key, SkyProperties properties) {
         ((SkyPropertiesAccessor) properties).getIdentifierMap().put(key, properties);
     }
