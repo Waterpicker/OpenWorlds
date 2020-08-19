@@ -13,48 +13,64 @@ import net.minecraft.world.dimension.DimensionType;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+@Environment(EnvType.CLIENT)
 public class OpenWorlds {
-    private static final Map<Identifier, SkyRenderer> skyRenderers = new HashMap<>();
-    private static final Map<Identifier, CloudRenderer> cloudRenderers = new HashMap<>();
-    private static final Map<Identifier, WeatherRenderer> weatherRenderers = new HashMap<>();
+    private static final Map<Identifier, SkyRenderer> SKY_RENDERERS = new HashMap<>();
+    private static final Map<Identifier, CloudRenderer> CLOUD_RENDERERS = new HashMap<>();
+    private static final Map<Identifier, WeatherRenderer> WEATHER_RENDERERS = new HashMap<>();
 
     /**
-     * @param key The Identifier of your Dimension Type
+     * Registers a custom sky renderer for a DimensionType
+     *
+     * @param key A RegistryKey for your Dimension Type
      * @param renderer A {@link SkyRenderer} implementation
      */
-    public static void registerSkyRenderer(Identifier key, SkyRenderer renderer) {
-        skyRenderers.put(key, renderer); 
+    public static void registerSkyRenderer(RegistryKey<DimensionType> key, SkyRenderer renderer) {
+        SKY_RENDERERS.put(key.getValue(), renderer);
     }
 
     /**
-     * @param key The Identifier of your Dimension Type
-     * @param renderer A {@link WeatherRenderer implementation}
+     * Registers a custom rain and snow renderer for a DimensionType
+     *
+     * @param key A RegistryKey for your Dimension Type
+     * @param renderer A {@link WeatherRenderer} implementation
      */
-    public static void registerWeatherRenderer(Identifier key, WeatherRenderer renderer) {
-        weatherRenderers.put(key, renderer);
+    public static void registerWeatherRenderer(RegistryKey<DimensionType> key, WeatherRenderer renderer) {
+        WEATHER_RENDERERS.put(key.getValue(), renderer);
     }
 
     /**
-     * @param key The Identifier of your Dimension Type
-     * @param properties The property to be registered
+     * Registers a custom sky property for a DimensionType
+     *
+     * @param key A RegistryKey for your Dimension Type
+     * @param properties The Dimension Type's sky properties
      */
-    public static void registerSkyProperty(Identifier key, SkyProperties properties) {
-        ((SkyPropertiesAccessor) properties).getIdentifierMap().put(key, properties);
+    public static void registerSkyProperty(RegistryKey<DimensionType> key, SkyProperties properties) {
+        ((SkyPropertiesAccessor) properties).getIdentifierMap().put(key.getValue(), properties);
     }
 
-    public static void registerCloudRenderer(Identifier key, CloudRenderer renderer) {
-        cloudRenderers.put(key, renderer);
+    /**
+     * Registers a a custom cloud renderer for a Dimension Type
+     *
+     * @param key A RegistryKey for your Dimension Type
+     * @param renderer A {@link CloudRenderer} implementation
+     */
+    public static void registerCloudRenderer(RegistryKey<DimensionType> key, CloudRenderer renderer) {
+        CLOUD_RENDERERS.put(key.getValue(), renderer);
     }
 
     public static SkyRenderer getSkyRenderer(Identifier key) {
-        return skyRenderers.get(key);
+        return SKY_RENDERERS.get(key);
     }
 
     public static CloudRenderer getCloudRenderer(Identifier key) {
-        return cloudRenderers.get(key);
+        return CLOUD_RENDERERS.get(key);
     }
 
     public static WeatherRenderer getWeatherRenderer(Identifier key) {
-        return weatherRenderers.get(key);
+        return WEATHER_RENDERERS.get(key);
     }
 }

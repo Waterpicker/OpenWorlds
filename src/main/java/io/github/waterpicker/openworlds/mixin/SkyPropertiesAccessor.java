@@ -8,6 +8,10 @@ import net.minecraft.world.dimension.DimensionType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+@Environment(EnvType.CLIENT)
 @Mixin(SkyProperties.class)
 public interface SkyPropertiesAccessor {
     @Accessor("BY_IDENTIFIER")
