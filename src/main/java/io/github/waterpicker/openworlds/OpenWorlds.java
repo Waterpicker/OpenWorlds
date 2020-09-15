@@ -1,20 +1,20 @@
 package io.github.waterpicker.openworlds;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 import io.github.waterpicker.openworlds.impl.DimensionInternals;
 import io.github.waterpicker.openworlds.mixin.client.SkyPropertiesAccessor;
-import io.github.waterpicker.openworlds.renderer.WeatherRenderer;
 import io.github.waterpicker.openworlds.renderer.CloudRenderer;
 import io.github.waterpicker.openworlds.renderer.SkyRenderer;
+import io.github.waterpicker.openworlds.renderer.WeatherRenderer;
+import com.mojang.serialization.Lifecycle;
 
 import net.minecraft.client.render.SkyProperties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.dimension.DimensionType;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.BiConsumer;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -26,7 +26,6 @@ public class OpenWorlds {
     private static final Map<Identifier, CloudRenderer> CLOUD_RENDERERS = new HashMap<>();
     @Environment(EnvType.CLIENT)
     private static final Map<Identifier, WeatherRenderer> WEATHER_RENDERERS = new HashMap<>();
-    private static final BiConsumer<RegistryKey<DimensionType>, DimensionType> DIMENSION_TYPE_BI_CONSUMER = DimensionInternals::putDimensionType;
 
     /**
      * Registers a custom sky renderer for a DimensionType
@@ -78,7 +77,11 @@ public class OpenWorlds {
      * @param type The Dimension Type itself
      */
     public static void registerDimensionType(RegistryKey<DimensionType> key, DimensionType type) {
-        DIMENSION_TYPE_BI_CONSUMER.accept(Objects.requireNonNull(key), Objects.requireNonNull(type));
+        registerDimensionType(key, type, Lifecycle.experimental());
+    }
+
+    public static void registerDimensionType(RegistryKey<DimensionType> key, DimensionType type, Lifecycle lifecycle) {
+        DimensionInternals.putDimensionType(Objects.requireNonNull(key), Objects.requireNonNull(type), lifecycle);
     }
 
     @Environment(EnvType.CLIENT)

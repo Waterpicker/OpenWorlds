@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import com.mojang.serialization.Lifecycle;
 
 import net.minecraft.util.registry.DynamicRegistryManager;
 import net.minecraft.util.registry.MutableRegistry;
@@ -21,7 +20,7 @@ public class DimensionTypeMixin {
     private static void addMoreRegistryDefaults(DynamicRegistryManager.Impl registryManager, CallbackInfoReturnable<DynamicRegistryManager.Impl> cir, MutableRegistry<DimensionType> mutableRegistry) {
         HashMap<RegistryKey<DimensionType>, DimensionType> dimensionTypes = DimensionInternals.getRegisteredDimensionTypes();
         for (RegistryKey<DimensionType> key : dimensionTypes.keySet()) {
-            mutableRegistry.add(key, dimensionTypes.get(key), Lifecycle.stable());
+            mutableRegistry.add(key, dimensionTypes.get(key), DimensionInternals.getDimensionTypeLifecycles().get(key));
         }
     }
 }
