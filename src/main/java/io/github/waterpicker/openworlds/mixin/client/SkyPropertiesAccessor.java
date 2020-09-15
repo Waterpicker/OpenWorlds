@@ -1,4 +1,4 @@
-package io.github.waterpicker.openworlds.mixin;
+package io.github.waterpicker.openworlds.mixin.client;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import net.minecraft.client.render.SkyProperties;
