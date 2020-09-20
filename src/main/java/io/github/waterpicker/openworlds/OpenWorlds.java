@@ -1,25 +1,30 @@
 package io.github.waterpicker.openworlds;
 
-import io.github.waterpicker.openworlds.mixin.SkyPropertiesAccessor;
-import io.github.waterpicker.openworlds.renderer.WeatherRenderer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
+import io.github.waterpicker.openworlds.impl.DimensionInternals;
+import io.github.waterpicker.openworlds.mixin.client.SkyPropertiesAccessor;
 import io.github.waterpicker.openworlds.renderer.CloudRenderer;
 import io.github.waterpicker.openworlds.renderer.SkyRenderer;
+import io.github.waterpicker.openworlds.renderer.WeatherRenderer;
+import com.mojang.serialization.Lifecycle;
 
 import net.minecraft.client.render.SkyProperties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.dimension.DimensionType;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-@Environment(EnvType.CLIENT)
 public class OpenWorlds {
+    @Environment(EnvType.CLIENT)
     private static final Map<Identifier, SkyRenderer> SKY_RENDERERS = new HashMap<>();
+    @Environment(EnvType.CLIENT)
     private static final Map<Identifier, CloudRenderer> CLOUD_RENDERERS = new HashMap<>();
+    @Environment(EnvType.CLIENT)
     private static final Map<Identifier, WeatherRenderer> WEATHER_RENDERERS = new HashMap<>();
 
     /**
@@ -28,6 +33,7 @@ public class OpenWorlds {
      * @param key A RegistryKey for your Dimension Type
      * @param renderer A {@link SkyRenderer} implementation
      */
+    @Environment(EnvType.CLIENT)
     public static void registerSkyRenderer(RegistryKey<DimensionType> key, SkyRenderer renderer) {
         SKY_RENDERERS.put(key.getValue(), renderer);
     }
@@ -38,6 +44,7 @@ public class OpenWorlds {
      * @param key A RegistryKey for your Dimension Type
      * @param renderer A {@link WeatherRenderer} implementation
      */
+    @Environment(EnvType.CLIENT)
     public static void registerWeatherRenderer(RegistryKey<DimensionType> key, WeatherRenderer renderer) {
         WEATHER_RENDERERS.put(key.getValue(), renderer);
     }
@@ -48,28 +55,46 @@ public class OpenWorlds {
      * @param key A RegistryKey for your Dimension Type
      * @param properties The Dimension Type's sky properties
      */
+    @Environment(EnvType.CLIENT)
     public static void registerSkyProperty(RegistryKey<DimensionType> key, SkyProperties properties) {
         ((SkyPropertiesAccessor) properties).getIdentifierMap().put(key.getValue(), properties);
     }
 
     /**
-     * Registers a a custom cloud renderer for a Dimension Type
+     * Registers a custom cloud renderer for a Dimension Type
      *
      * @param key A RegistryKey for your Dimension Type
      * @param renderer A {@link CloudRenderer} implementation
      */
+    @Environment(EnvType.CLIENT)
     public static void registerCloudRenderer(RegistryKey<DimensionType> key, CloudRenderer renderer) {
         CLOUD_RENDERERS.put(key.getValue(), renderer);
     }
 
+    /**
+     * Adds a {@link DimensionType} to the Dimension Type Dynamic Registry
+     * @param key A RegistryKey for your Dimension Type
+     * @param type The Dimension Type itself
+     */
+    public static void registerDimensionType(RegistryKey<DimensionType> key, DimensionType type) {
+        registerDimensionType(key, type, Lifecycle.experimental());
+    }
+
+    public static void registerDimensionType(RegistryKey<DimensionType> key, DimensionType type, Lifecycle lifecycle) {
+        DimensionInternals.putDimensionType(Objects.requireNonNull(key), Objects.requireNonNull(type), lifecycle);
+    }
+
+    @Environment(EnvType.CLIENT)
     public static SkyRenderer getSkyRenderer(Identifier key) {
         return SKY_RENDERERS.get(key);
     }
 
+    @Environment(EnvType.CLIENT)
     public static CloudRenderer getCloudRenderer(Identifier key) {
         return CLOUD_RENDERERS.get(key);
     }
 
+    @Environment(EnvType.CLIENT)
     public static WeatherRenderer getWeatherRenderer(Identifier key) {
         return WEATHER_RENDERERS.get(key);
     }

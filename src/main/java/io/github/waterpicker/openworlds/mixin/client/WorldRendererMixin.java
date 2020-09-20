@@ -1,4 +1,4 @@
-package io.github.waterpicker.openworlds.mixin;
+package io.github.waterpicker.openworlds.mixin.client;
 
 import io.github.waterpicker.openworlds.OpenWorlds;
 import io.github.waterpicker.openworlds.renderer.CloudRenderer;
