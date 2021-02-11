@@ -2,14 +2,11 @@ package io.github.waterpicker.openworlds;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
-import io.github.waterpicker.openworlds.impl.DimensionInternals;
 import io.github.waterpicker.openworlds.mixin.client.SkyPropertiesAccessor;
 import io.github.waterpicker.openworlds.renderer.CloudRenderer;
 import io.github.waterpicker.openworlds.renderer.SkyRenderer;
 import io.github.waterpicker.openworlds.renderer.WeatherRenderer;
-import com.mojang.serialization.Lifecycle;
 
 import net.minecraft.client.render.SkyProperties;
 import net.minecraft.util.Identifier;
