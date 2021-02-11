@@ -71,19 +71,6 @@ public class OpenWorlds {
         CLOUD_RENDERERS.put(key.getValue(), renderer);
     }
 
-    /**
-     * Adds a {@link DimensionType} to the Dimension Type Dynamic Registry
-     * @param key A RegistryKey for your Dimension Type
-     * @param type The Dimension Type itself
-     */
-    public static void registerDimensionType(RegistryKey<DimensionType> key, DimensionType type) {
-        registerDimensionType(key, type, Lifecycle.experimental());
-    }
-
-    public static void registerDimensionType(RegistryKey<DimensionType> key, DimensionType type, Lifecycle lifecycle) {
-        DimensionInternals.putDimensionType(Objects.requireNonNull(key), Objects.requireNonNull(type), lifecycle);
-    }
-
     @Environment(EnvType.CLIENT)
     public static SkyRenderer getSkyRenderer(Identifier key) {
         return SKY_RENDERERS.get(key);
