@@ -3,9 +3,6 @@
   "minVersion": "0.8",
   "package": "io.github.waterpicker.openworlds.mixin",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [
-    "DimensionTypeMixin"
-  ],
   "client": [
     "client.SkyPropertiesAccessor",
     "client.WorldRendererMixin"
