@@ -5,6 +5,8 @@ import io.github.waterpicker.openworlds.renderer.CloudRenderer;
 import io.github.waterpicker.openworlds.renderer.SkyRenderer;
 import io.github.waterpicker.openworlds.renderer.WeatherRenderer;
 
+import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.registry.Registry;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,7 +37,7 @@ public class WorldRendererMixin {
     private void renderWeather(LightmapTextureManager manager, float tickDelta, double x, double y, double z, CallbackInfo info) {
         WeatherRenderer renderer = null;
         if (this.client.world != null) {
-            renderer = OpenWorlds.getWeatherRenderer(this.client.world.getRegistryManager().getDimensionTypes().getId(this.client.world.getDimension()));
+            renderer = OpenWorlds.getWeatherRenderer(world.getRegistryManager().get(Registry.DIMENSION_TYPE_KEY).getId(world.getDimension()));
         }
 
         if(renderer != null) {
@@ -44,24 +46,24 @@ public class WorldRendererMixin {
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "renderClouds(Lnet/minecraft/client/util/math/MatrixStack;FDDD)V", cancellable = true)
-    private void renderCloud(MatrixStack matrices, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo info) {
+    @Inject(at = @At("HEAD"), method = "Lnet/minecraft/client/render/WorldRenderer;renderClouds(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FDDD)V", cancellable = true)
+    private void renderCloud(MatrixStack matrices, Matrix4f matrix4f, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo info) {
         CloudRenderer renderer = null;
         if (this.client.world != null) {
-            renderer = OpenWorlds.getCloudRenderer(this.client.world.getRegistryManager().getDimensionTypes().getId(this.client.world.getDimension()));
+            renderer = OpenWorlds.getCloudRenderer(world.getRegistryManager().get(Registry.DIMENSION_TYPE_KEY).getId(world.getDimension()));
         }
 
         if(renderer != null) {
-            renderer.render(this.client, matrices, tickDelta, cameraX, cameraY, cameraZ);
+            renderer.render(this.client, matrices, matrix4f ,tickDelta, cameraX, cameraY, cameraZ);
             info.cancel();
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;F)V", cancellable = true)
-    private void renderSky(MatrixStack matrices, float tickDelta, CallbackInfo info) {
+    @Inject(at = @At("HEAD"), method = "renderSky", cancellable = true)
+    private void renderSky(MatrixStack matrices, Matrix4f matrix4f, float tickDelta, CallbackInfo info) {
         SkyRenderer renderer = null;
         if (this.client.world != null) {
-            renderer = OpenWorlds.getSkyRenderer(this.client.world.getRegistryManager().getDimensionTypes().getId(this.client.world.getDimension()));
+            renderer = OpenWorlds.getSkyRenderer(world.getRegistryManager().get(Registry.DIMENSION_TYPE_KEY).getId(world.getDimension()));
         }
 
         if(renderer != null) {
