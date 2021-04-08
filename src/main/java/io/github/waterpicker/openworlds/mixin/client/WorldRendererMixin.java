@@ -17,6 +17,7 @@ import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.registry.Registry;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -33,10 +34,7 @@ public class WorldRendererMixin {
 
     @Inject(at = @At("HEAD"), method = "renderWeather", cancellable = true)
     private void renderWeather(LightmapTextureManager manager, float tickDelta, double x, double y, double z, CallbackInfo info) {
-        WeatherRenderer renderer = null;
-        if (this.client.world != null) {
-            renderer = OpenWorlds.getWeatherRenderer(this.client.world.getRegistryManager().getDimensionTypes().getId(this.client.world.getDimension()));
-        }
+        WeatherRenderer renderer = OpenWorlds.getWeatherRenderer(this.client.world.getRegistryManager().get(Registry.DIMENSION_TYPE_KEY).getId(this.client.world.getDimension()));
 
         if(renderer != null) {
             renderer.render(this.client, manager, tickDelta, x,y,z);
@@ -46,10 +44,7 @@ public class WorldRendererMixin {
 
     @Inject(at = @At("HEAD"), method = "renderClouds(Lnet/minecraft/client/util/math/MatrixStack;FDDD)V", cancellable = true)
     private void renderCloud(MatrixStack matrices, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo info) {
-        CloudRenderer renderer = null;
-        if (this.client.world != null) {
-            renderer = OpenWorlds.getCloudRenderer(this.client.world.getRegistryManager().getDimensionTypes().getId(this.client.world.getDimension()));
-        }
+        CloudRenderer renderer = OpenWorlds.getCloudRenderer(this.client.world.getRegistryManager().get(Registry.DIMENSION_TYPE_KEY).getId(this.client.world.getDimension()));
 
         if(renderer != null) {
             renderer.render(this.client, matrices, tickDelta, cameraX, cameraY, cameraZ);
@@ -59,10 +54,7 @@ public class WorldRendererMixin {
 
     @Inject(at = @At("HEAD"), method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;F)V", cancellable = true)
     private void renderSky(MatrixStack matrices, float tickDelta, CallbackInfo info) {
-        SkyRenderer renderer = null;
-        if (this.client.world != null) {
-            renderer = OpenWorlds.getSkyRenderer(this.client.world.getRegistryManager().getDimensionTypes().getId(this.client.world.getDimension()));
-        }
+        SkyRenderer renderer = OpenWorlds.getSkyRenderer(this.client.world.getRegistryManager().get(Registry.DIMENSION_TYPE_KEY).getId(this.client.world.getDimension()));
 
         if(renderer != null) {
             renderer.render(this.client, matrices, tickDelta);

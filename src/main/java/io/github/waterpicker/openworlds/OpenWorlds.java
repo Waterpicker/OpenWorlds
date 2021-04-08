@@ -2,14 +2,11 @@ package io.github.waterpicker.openworlds;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
-import io.github.waterpicker.openworlds.impl.DimensionInternals;
 import io.github.waterpicker.openworlds.mixin.client.SkyPropertiesAccessor;
 import io.github.waterpicker.openworlds.renderer.CloudRenderer;
 import io.github.waterpicker.openworlds.renderer.SkyRenderer;
 import io.github.waterpicker.openworlds.renderer.WeatherRenderer;
-import com.mojang.serialization.Lifecycle;
 
 import net.minecraft.client.render.SkyProperties;
 import net.minecraft.util.Identifier;
@@ -69,19 +66,6 @@ public class OpenWorlds {
     @Environment(EnvType.CLIENT)
     public static void registerCloudRenderer(RegistryKey<DimensionType> key, CloudRenderer renderer) {
         CLOUD_RENDERERS.put(key.getValue(), renderer);
-    }
-
-    /**
-     * Adds a {@link DimensionType} to the Dimension Type Dynamic Registry
-     * @param key A RegistryKey for your Dimension Type
-     * @param type The Dimension Type itself
-     */
-    public static void registerDimensionType(RegistryKey<DimensionType> key, DimensionType type) {
-        registerDimensionType(key, type, Lifecycle.experimental());
-    }
-
-    public static void registerDimensionType(RegistryKey<DimensionType> key, DimensionType type, Lifecycle lifecycle) {
-        DimensionInternals.putDimensionType(Objects.requireNonNull(key), Objects.requireNonNull(type), lifecycle);
     }
 
     @Environment(EnvType.CLIENT)

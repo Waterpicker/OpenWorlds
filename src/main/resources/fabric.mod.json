@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Open Worlds",
-  "description": "This is a ",
+  "description": "Custom sky rendering",
   "authors": [
     "Waterpicker"
   ],
