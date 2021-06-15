@@ -46,7 +46,7 @@ public class WorldRendererMixin {
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "Lnet/minecraft/client/render/WorldRenderer;renderClouds(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FDDD)V", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "renderClouds(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FDDD)V", cancellable = true)
     private void renderCloud(MatrixStack matrices, Matrix4f matrix4f, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo info) {
         CloudRenderer renderer = null;
         if (this.client.world != null) {
@@ -60,7 +60,7 @@ public class WorldRendererMixin {
     }
 
     @Inject(at = @At("HEAD"), method = "renderSky", cancellable = true)
-    private void renderSky(MatrixStack matrices, Matrix4f matrix4f, float tickDelta, CallbackInfo info) {
+    private void renderSky(MatrixStack matrices, Matrix4f matrix4f, float tickDelta, Runnable runnable, CallbackInfo ci) {
         SkyRenderer renderer = null;
         if (this.client.world != null) {
             renderer = OpenWorlds.getSkyRenderer(world.getRegistryManager().get(Registry.DIMENSION_TYPE_KEY).getId(world.getDimension()));
@@ -68,7 +68,7 @@ public class WorldRendererMixin {
 
         if(renderer != null) {
             renderer.render(this.client, matrices, tickDelta);
-            info.cancel();
+            ci.cancel();
         }
     }
 }
